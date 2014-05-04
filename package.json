@@ -1,0 +1,25 @@
+{
+  "name": "pangu-la-faye",
+  "description": "a websocket server. ",
+  "keywords": [
+    "pangu",
+    "faye",
+    "faye-server"
+  ],
+  "version": "0.1.0",
+  "author": "tangsz@asiainfo-linkage.com",
+  "contributors": [],
+  "engines": {
+    "node": ">=0.10.12",
+    "npm": ">=1.2.32"
+  },
+  "scripts": {
+     "start": "node server.js"
+  },
+  "dependencies": {
+    "faye": "latest", 
+    "faye-redis": "latest",
+    "mime": "latest",
+    "log4js": "0.6.13"
+  }
+}

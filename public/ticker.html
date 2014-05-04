@@ -1,0 +1,35 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content-type="text/html; charset=utf-8">
+    <title>Ticker</title>
+    <script type="text/javascript" src="http://localhost:8001/faye/client.js"></script>
+  </head>
+  <body>
+
+    <p id="transport"></p>
+    <h1 id="ticker"></h1>
+
+    <script type="text/javascript">
+      var client    = new Faye.Client('/baye'),
+          ticker    = document.getElementById('ticker'),
+          transport = document.getElementById('transport');
+
+      client.addExtension({
+        outgoing: function(message, callback) {
+          if (message.channel === '/meta/connect') {
+            transport.innerHTML = message.connectionType;
+          }
+          callback(message);
+        }
+      });
+
+      client.subscribe('/chat/tick', function(message) {
+        alert(1)
+        ticker.innerHTML = message.n;
+      });
+    </script>
+
+  </body>
+</html>
