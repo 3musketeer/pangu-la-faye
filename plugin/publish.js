@@ -51,7 +51,7 @@ exports.dealPlugin = function(bayeux){
                 })
             }
         });
-        tref = setTimeout(schedule, 6000);
+        tref = setTimeout(schedule, 60000);
     }
        
     schedule();    
