@@ -20,6 +20,7 @@
     "faye": "latest", 
     "faye-redis": "latest",
     "mime": "latest",
-    "log4js": "0.6.13"
+    "log4js": "0.6.13",
+    "mongoose": "latest"
   }
 }

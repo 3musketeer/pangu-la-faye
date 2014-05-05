@@ -12,8 +12,7 @@ var env = process.env.NODE_ENV || 'development',
 
 var SHARED_DIR = __dirname,
     PUBLIC_DIR = SHARED_DIR + '/public',
-
-
+    
     bayeux = new faye.NodeAdapter({
       mount:    '/faye',
       timeout:  60,
@@ -24,11 +23,14 @@ var SHARED_DIR = __dirname,
       }
     }),
     
-    port       = process.argv[2] || config.bayeux.port,
+    port       = config.bayeux.port,
+    pluginItem     = process.argv[2] ||'',
     secure     = process.argv[3] === 'ssl';
     //key        = fs.readFileSync(SHARED_DIR + '/server.key'),
   //  cert       = fs.readFileSync(SHARED_DIR + '/server.crt');
 
+
+logger.debug('pluginItem=%s',pluginItem);
 
 var handleRequest = function(request, response) {
   var path = (request.url === '/') ? '/index.html' : request.url;
@@ -54,15 +56,18 @@ bayeux.attach(server);
 server.listen(Number(port));
 
 
-//bayeux.getClient().subscribe('/chat/*', function(message) {
- // logger.debug('[' + message.user + ']: ' + message.message);
-//});
 
+if( pluginItem != ''){
+    require('./plugin/'+pluginItem).dealPlugin(bayeux);
+}
+
+bayeux.on('publish', function(clientId, channel) {
+  logger.debug('[  publish] ' + ' -> ' + channel);
+});
 
 bayeux.on('subscribe', function(clientId, channel) {
   logger.debug('[  SUBSCRIBE] ' + clientId + ' -> ' + channel);
 });
-
 
 bayeux.on('unsubscribe', function(clientId, channel) {
   logger.debug('[UNSUBSCRIBE] ' + clientId + ' -> ' + channel);
