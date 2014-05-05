@@ -24,10 +24,7 @@ var SHARED_DIR = __dirname,
     }),
     
     port       = config.bayeux.port,
-    pluginItem     = process.argv[2] ||'',
-    secure     = process.argv[3] === 'ssl';
-    //key        = fs.readFileSync(SHARED_DIR + '/server.key'),
-  //  cert       = fs.readFileSync(SHARED_DIR + '/server.crt');
+    pluginItem     = process.argv[2] ||'';
 
 
 logger.debug('pluginItem=%s',pluginItem);
@@ -47,16 +44,11 @@ var handleRequest = function(request, response) {
 };
 
 
-var server = secure
-           ? https.createServer({cert: cert, key: key}, handleRequest)
-           : http.createServer(handleRequest);
-
-
+var server = http.createServer(handleRequest);
 bayeux.attach(server);
 server.listen(Number(port));
 
-
-
+//Plug-in technology    
 if( pluginItem != ''){
     require('./plugin/'+pluginItem).dealPlugin(bayeux);
 }
@@ -65,17 +57,4 @@ bayeux.on('publish', function(clientId, channel) {
   logger.debug('[  publish] ' + ' -> ' + channel);
 });
 
-bayeux.on('subscribe', function(clientId, channel) {
-  logger.debug('[  SUBSCRIBE] ' + clientId + ' -> ' + channel);
-});
-
-bayeux.on('unsubscribe', function(clientId, channel) {
-  logger.debug('[UNSUBSCRIBE] ' + clientId + ' -> ' + channel);
-});
-
-
-bayeux.on('disconnect', function(clientId) {
-  logger.debug('[ DISCONNECT] ' + clientId);
-});
-
-logger.debug('Listening on ' + port + (secure? ' (https)' : ''));
+logger.debug('Listening on ' + port);
