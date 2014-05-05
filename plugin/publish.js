@@ -41,9 +41,9 @@ exports.dealPlugin = function(bayeux){
     	      
     	  var collection = 'warning'+YY+MM+DD;
     	  logger.debug('collection=%s',collection);    
-    	  var table = db.model('warningInfo',collection);  
-        table.find({'state': '0'}, function(err, resultRow){
-            if(err)  throw new Error(err);	
+    	  var table = db.model('warningInfo',collection);   
+        table.find({'state': '1'}, function(err, resultRow){
+            if(err)  logger.error(err);	
             if(resultRow){
                 resultRow.forEach(function(item){  
                     logger.debug('item=%s',JSON.stringify(item)); 
