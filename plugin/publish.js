@@ -1,10 +1,10 @@
-var fs = require('fs'),
+锘縱ar fs = require('fs'),
     mongoose = require('mongoose'),   
     env = process.env.NODE_ENV || 'development',
     config = require('../config/config')[env],
     logger = require('../log').logger;
 
-var warningType = {'error':'异常','timeOut':'超时'};
+var warningType = {'error':'寮傚父','timeOut':'瓒呮椂'};
 
 exports.dealPlugin = function(bayeux){
         
@@ -42,20 +42,12 @@ exports.dealPlugin = function(bayeux){
     	  var collection = 'warning'+YY+MM+DD;
     	  logger.debug('collection=%s',collection);    
     	  var table = db.model('warningInfo',collection);  
-        table.find({'state': '1'}, function(err, resultRow){
+        table.find({'state': '0'}, function(err, resultRow){
             if(err)  throw new Error(err);	
             if(resultRow){
                 resultRow.forEach(function(item){  
-                    logger.debug('item=%s',JSON.stringify(item));
-                    
-                    var content = '异常类型：'+ warningType[item.type]+'</br>';
-                    content = content + '异常时间：'+ item.time +'</br>';
-                    if(message.host !='all'){
-                        content = content + '异常主机：'+item.host +'</br>';
-                    }
-                    content = content + '异常内容：</br>' + item.detail+'</br>';
-                    content = content + '-------------------------------------------------------------'+'</br>'; 
-                    bayeux.getClient().publish('/SystemMessage/'+item.type, content); 
+                    logger.debug('item=%s',JSON.stringify(item)); 
+                    bayeux.getClient().publish('/SystemMessage/'+item.type, {id:item._id,host:item.host,time:item.time,type:warningType[item.type],detail:item.detail}); 
                 })
             }
         });
