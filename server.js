@@ -50,6 +50,12 @@ server.listen(Number(port));
 
 //Plug-in technology    
 if( pluginItem != ''){
+    // Bootstrap models
+    var models_path = __dirname + '/plugin/models'
+    fs.readdirSync(models_path).forEach(function (file) {
+        if (~file.indexOf('.js') &&!~file.indexOf('.swp')) require(models_path + '/' + file ) 
+    })
+    
     require('./plugin/'+pluginItem).dealPlugin(bayeux);
 }
 
