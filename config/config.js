@@ -9,7 +9,7 @@ module.exports = {
 	  
 	  bayeux: {
         host:'127.0.0.1',
-        port:'8001'
+        port:'6000'
     },
     
     redis: {
