@@ -4,7 +4,6 @@
     config = require('../config/config')[env],
     logger = require('../log').logger;
 
-var warningType = {'level-1':'','level-2':''};
 
 exports.dealPlugin = function(bayeux){
         
@@ -23,7 +22,7 @@ exports.dealPlugin = function(bayeux){
             	var table = db.model('warningInfo',collection); 
                 logger.debug('message=%s',JSON.stringify(message));
                 table.update({_id:message.data.id},{$set:{state:'1'}},function(err){
-        		        if(err) throw new Error(err);	 	    
+        		    if(err) throw new Error(err);	 	    
                 });
             }  
             callback(message);    
@@ -47,7 +46,7 @@ exports.dealPlugin = function(bayeux){
             if(resultRow){
                 resultRow.forEach(function(item){  
                     logger.debug('item=%s',JSON.stringify(item)); 
-                    bayeux.getClient().publish('/SystemMessage/'+item.type, {id:item._id,host:item.host,time:item.time,type:warningType[item.type],detail:item.detail}); 
+                    bayeux.getClient().publish('/SystemMessage/'+item.type, {id:item._id,host:item.host,time:item.time,type:'',detail:item.detail}); 
                 })
             }
         });
