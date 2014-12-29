@@ -4,7 +4,7 @@
     config = require('../config/config')[env],
     logger = require('../log').logger;
 
-var warningType = {'error':'异常','timeOut':'超时'};
+var warningType = {'level-1':'','level-2':''};
 
 exports.dealPlugin = function(bayeux){
         
@@ -19,8 +19,8 @@ exports.dealPlugin = function(bayeux){
             	      DD = ("00"+dt.getDate()).substr(-2),
             	      HH = ("00"+dt.getHours()).substr(-2);
             	      
-            	  var collection = 'warning'+YY+MM+DD;   
-            	  var table = db.model('warningInfo',collection); 
+            	var collection = 'warning'+YY+MM+DD;   
+            	var table = db.model('warningInfo',collection); 
                 logger.debug('message=%s',JSON.stringify(message));
                 table.update({_id:message.data.id},{$set:{state:'1'}},function(err){
         		        if(err) throw new Error(err);	 	    
@@ -39,10 +39,10 @@ exports.dealPlugin = function(bayeux){
     	      DD = ("00"+dt.getDate()).substr(-2),
     	      HH = ("00"+dt.getHours()).substr(-2);
     	      
-    	  var collection = 'warning'+YY+MM+DD;
-    	  logger.debug('collection=%s',collection);    
-    	  var table = db.model('warningInfo',collection);   
-        table.find({'state': '1'}, function(err, resultRow){
+    	var collection = 'warning'+YY+MM+DD;
+    	logger.debug('collection=%s',collection);    
+    	var table = db.model('warningInfo',collection);   
+        table.find({'state': '0'}, function(err, resultRow){
             if(err)  logger.error(err);	
             if(resultRow){
                 resultRow.forEach(function(item){  
@@ -51,7 +51,7 @@ exports.dealPlugin = function(bayeux){
                 })
             }
         });
-        tref = setTimeout(schedule, 60000);
+        tref = setTimeout(schedule, 1000*10);
     }
        
     schedule();    
